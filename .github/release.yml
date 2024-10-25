@@ -1,0 +1,14 @@
+changelog:
+  categories:
+    - title: 🏕 Features
+      labels:
+        - Feature
+    - title: 👒 Refactors
+      labels:
+        - Refactor
+    - title: 🛠️ Fixes
+      labels:
+        - Fix
+    - title: 🧪 Tests
+      labels:
+        - Test
