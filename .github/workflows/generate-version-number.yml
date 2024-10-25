@@ -1,0 +1,45 @@
+name: Create Release on Merge
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Determine version
+        id: version
+        run: |
+          # Sort tags by version and get the highest one
+          latest_tag=$(git tag --sort=-v:refname | head -n 1)
+          echo "The latest tag is $latest_tag"
+          if [[ -z "$latest_tag" ]]; then
+            # Start with v1.0.0 if no tags exist
+            new_version="v1.0.0"
+          else
+            # Remove 'v' prefix and parse major, minor, and patch numbers
+            latest_tag="${latest_tag#v}"
+            major=$(echo $latest_tag | cut -d. -f1)
+            minor=$(echo $latest_tag | cut -d. -f2)
+            patch=$(echo $latest_tag | cut -d. -f3)
+
+            # Increment minor version and reset patch
+            minor=$((minor + 1))
+            patch=0
+
+            # Format new version
+            new_version="v${major}.${minor}.${patch}"
+          fi
+
+          echo "new_version=$new_version" >> $GITHUB_ENV
