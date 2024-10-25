@@ -41,7 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.new_version }}
-          release_name: Release ${{ env.new_version }}
+          release_name: ${{ env.new_version }}
           body: "Automated release generated on merge to main"
           draft: false
           prerelease: false
