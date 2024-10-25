@@ -53,6 +53,6 @@ jobs:
         with:
           tag_name: ${{ env.new_version }}
           release_name: ${{ env.new_version }}
-          body: "Automated release generated on merge to main"
+          body: ${{ env.release_notes }}
           draft: false
           prerelease: false
