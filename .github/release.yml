@@ -1,9 +1,9 @@
 changelog:
   categories:
-    - title: 🏕 Features
+    - title: 🚀 Features
       labels:
         - Feature
-    - title: 👒 Refactors
+    - title: ♻️ Refactors
       labels:
         - Refactor
     - title: 🛠️ Fixes
