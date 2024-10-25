@@ -21,18 +21,27 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "")
+          # Sort tags by version and get the highest one
+          latest_tag=$(git tag --sort=-v:refname | head -n 1)
+
           if [[ -z "$latest_tag" ]]; then
+            # Start with v1.0.0 if no tags exist
             new_version="v1.0.0"
           else
+            # Remove 'v' prefix and parse major, minor, and patch numbers
             latest_tag="${latest_tag#v}"
             major=$(echo $latest_tag | cut -d. -f1)
             minor=$(echo $latest_tag | cut -d. -f2)
             patch=$(echo $latest_tag | cut -d. -f3)
+
+            # Increment minor version and reset patch
             minor=$((minor + 1))
             patch=0
+
+            # Format new version
             new_version="v${major}.${minor}.${patch}"
           fi
+
           echo "new_version=$new_version" >> $GITHUB_ENV
 
       - name: Create GitHub Release
