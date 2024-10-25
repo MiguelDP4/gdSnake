@@ -21,13 +21,17 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          # Check if any tags exist; if not, use a default initial version
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` || echo "")
           if [[ -z "$latest_tag" ]]; then
             new_version="v1.0.0"
           else
-            # Assume a semver tag format and increment the patch version
-            new_version=$(echo $latest_tag | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            latest_tag="${latest_tag#v}"
+            major=$(echo $latest_tag | cut -d. -f1)
+            minor=$(echo $latest_tag | cut -d. -f2)
+            patch=$(echo $latest_tag | cut -d. -f3)
+            minor=$((minor + 1))
+            patch=0
+            new_version="v${major}.${minor}.${patch}"
           fi
           echo "new_version=$new_version" >> $GITHUB_ENV
 
@@ -36,8 +40,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version.outputs.new_version }}
-          release_name: v${{ steps.version.outputs.new_version }}
+          tag_name: ${{ env.new_version }}
+          release_name: Release ${{ env.new_version }}
           body: "Automated release generated on merge to main"
           draft: false
           prerelease: false
