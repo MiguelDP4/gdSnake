@@ -46,6 +46,22 @@ jobs:
 
           echo "new_version=$new_version" >> $GITHUB_ENV
 
+      - name: Generate Release Notes
+        id: generate_release_notes
+        run: |
+          # Get the latest tag
+          latest_tag=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+
+          if [[ -z "$latest_tag" ]]; then
+            # If there are no tags, show all commits
+            release_notes=$(git log --oneline)
+          else
+            # Generate release notes since the last tag
+            release_notes=$(git log ${latest_tag}..HEAD --oneline)
+          fi
+
+          echo "release_notes=$release_notes" >> $GITHUB_ENV
+
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
