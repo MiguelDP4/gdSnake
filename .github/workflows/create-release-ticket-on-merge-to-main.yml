@@ -23,7 +23,7 @@ jobs:
         run: |
           # Sort tags by version and get the highest one
           latest_tag=$(git tag --sort=-v:refname | head -n 1)
-
+          echo "The latest tag is $latest_tag"
           if [[ -z "$latest_tag" ]]; then
             # Start with v1.0.0 if no tags exist
             new_version="v1.0.0"
