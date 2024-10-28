@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Show Environment Variable
+        env:
+          MY_ENV_VAR: "42"
         run: echo "Environment variable - $MY_ENV_VAR"
       
       - name: Show Secret
