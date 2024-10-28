@@ -1,0 +1,24 @@
+name: Echo Environment and Secret Variables
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  echo-vars:
+    runs-on: ubuntu-latest
+
+    env:
+      MY_ENV_VAR: "This is an environment variable"  # Define environment variable here
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Echo Environment Variable
+        run: echo "Environment variable: $MY_ENV_VAR"  # Echo the environment variable
+
+      - name: Echo Secret
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}  # Define the secret variable for this step
+        run: echo "Secret variable: $MY_SECRET"  # Echo the secret variable
